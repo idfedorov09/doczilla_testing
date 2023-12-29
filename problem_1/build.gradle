@@ -3,14 +3,13 @@ plugins {
 }
 
 group = 'ru.doczilla.testing'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {}
 
-test {
-    useJUnitPlatform()
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ru.doczilla.testing.Main'
+        )
+    }
 }

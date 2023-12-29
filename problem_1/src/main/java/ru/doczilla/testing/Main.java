@@ -15,6 +15,9 @@ public class Main {
         for (String arg : args) {
             if (arg.startsWith("--folder=")) {
                 folderPath = arg.substring("--folder=".length());
+                if (folderPath.charAt(folderPath.length() - 1) == '/') {
+                    folderPath = folderPath.substring(0, folderPath.length() - 1);
+                }
                 break;
             }
         }
