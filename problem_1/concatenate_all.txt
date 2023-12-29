@@ -1,0 +1,19 @@
+test-A
+
+require 'b'
+test-BBBBBBB
+
+nothing to require ''
+cccccccccc
+
+require 'a'
+require 'b'
+require 'd'
+require 'e'
+test-ddddddd
+
+require 'b'
+require 'e'
+require 'f'
+eeeeeeeeeeeeeshka
+ffffffffffffka
