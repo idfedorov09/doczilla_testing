@@ -7,9 +7,9 @@ problem_1/sorted_list.txt
 problem_1/cycle_by_requires.txt
 problem_1/concatenate_all.txt
 
-problem_2/student_server/.idea
-problem_2/student_server/build
-problem_2/student_server/.gradle
-problem_2/student_server/src/main/resources/application.properties
+problem_2/.idea
+problem_2/build
+problem_2/.gradle
+problem_2/src/main/resources/application.properties
 
 problem_3
