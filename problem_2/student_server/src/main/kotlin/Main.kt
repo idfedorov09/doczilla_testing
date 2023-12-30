@@ -1,9 +1,13 @@
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.io.File
+import java.net.URL
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -27,6 +31,7 @@ fun Application.configureCors() {
 fun Application.configureRouting() {
     val serverRouter = ServerRouter()
     routing {
+        staticResources("/static", "assets")
         studentRouting(serverRouter)
     }
 }
@@ -51,4 +56,5 @@ fun Route.studentRouting(
             serverRouter.getQuery(call)
         }
     }
+    staticResources("/", "static", "index.html")
 }
