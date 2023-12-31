@@ -47,10 +47,10 @@ pg.password=...
 В базе данных должна присутсвовать таблица `students_table`:
 ```sql
 CREATE TABLE students_table (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
-    second_name TEXT,
-    middle_name TEXT,
+	id SERIAL PRIMARY KEY,
+	name TEXT,
+	second_name TEXT,
+	middle_name TEXT,
 	birthday TEXT,
 	study_group TEXT
 )
