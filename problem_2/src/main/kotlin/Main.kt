@@ -1,31 +1,22 @@
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import java.io.File
-import java.net.URL
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.application.install
+import io.ktor.server.http.content.staticResources
+import io.ktor.server.netty.EngineMain
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
     configureRouting()
-    configureCors()
     configureSerialization()
-}
-
-fun Application.configureCors() {
-    install(CORS) {
-        anyHost()
-        allowMethod(HttpMethod.Put)
-        allowMethod(HttpMethod.Get)
-        allowMethod(HttpMethod.Delete)
-        allowHeader(HttpHeaders.ContentType)
-        allowHeaders { true }
-    }
 }
 
 fun Application.configureRouting() {

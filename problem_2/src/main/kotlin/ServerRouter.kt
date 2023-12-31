@@ -1,8 +1,11 @@
-import Properties.*
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
+import Properties.POSTGRES_PASSWORD
+import Properties.POSTGRES_URL
+import Properties.POSTGRES_USERNAME
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.request.ContentTransformationException
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
 import org.postgresql.util.PSQLException
 import java.sql.Connection
 import java.sql.DriverManager
