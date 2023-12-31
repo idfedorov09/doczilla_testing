@@ -62,7 +62,7 @@ CREATE TABLE students_table (
 Студент представляется следующей сущностью:
 ```json
 {
-	"id": uuid,
+	"id": integer,
 	"name": string,
 	"second_name": string,
 	"middle_name": string,
