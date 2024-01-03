@@ -150,11 +150,14 @@ function preRenderFullTask(task) {
     $('.modal-wrapper .date').text(convertToMoscowTime(task.date));
 }
 
-// TODO: показывать, когда пусто!
-function onChangeDate(from, to) {
+function preQuery() {
     $('.content-wrapper').empty();
     renderJustSpan("Ищу, подождите...");
+}
 
+// TODO: показывать, когда пусто!
+function onChangeDate(from, to) {
+    preQuery();
 
     const queryParams = new URLSearchParams({
         from_date: from,
@@ -178,5 +181,35 @@ function onChangeDate(from, to) {
             console.error('Fetch error:', error);
         });
 }
+
+function findByString(text) {
+    preQuery();
+
+    const queryParams = new URLSearchParams({ q: text });
+
+    fetch(todoUri + '/api/todos/find?' + queryParams, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateTaskList(data);
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+$(".search-input").keypress(function (event) {
+    if (event.which === 13) {
+        const searchValue = $(".search-input").val();
+        findByString(searchValue);
+    }
+});
 
 searchToday();
