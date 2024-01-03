@@ -1,5 +1,4 @@
 .modal {
-    /*display: none; */ /* в выключенном состоянии, добавить анимацию перехода */
     position: fixed;
     z-index: 1;
     background-color: white;
@@ -11,6 +10,20 @@
     max-height: 60%;
     display: flex;
     flex-direction: column;
+}
+
+.modal.hide-modal {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.modal.show-modal {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .modal-wrapper {

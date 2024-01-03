@@ -13,10 +13,18 @@ body {
     height: 100%;
     overflow: hidden;
     background-color: rgb(241, 241, 241);
+}
 
-    /* эти свойства накидываем при переключении на полное описание задачи; добавить анимацию перехода? */
+.body-wrapper.frozen {
     pointer-events: none;
     filter: brightness(0.65);
+    transition: all 0.3s ease;
+}
+
+.body-wrapper.default {
+    pointer-events: all;
+    filter: brightness(1);
+    transition: all 0.3s ease;
 }
 
 .header {
