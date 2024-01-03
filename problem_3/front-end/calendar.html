@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="general-style.css">
+    <link rel="stylesheet" href="calendar.css">
+</head>
+
+<body>
+    <div class="wraper">
+        <div class="header">
+            <div class="query-block">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Поиск...">
+                </div>
+            </div>
+            <div class="header-text-block">
+                <h1>DocZilla To-Do List</h1>
+            </div>
+        </div>
+
+        <div class="left-column">
+            <button type="submit" class="column">На сегодня</button>
+            <button type="submit" class="column">На неделю</button>
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="prev">&lt;</button>
+                    <h2 class="month-year"></h2>
+                    <button class="next">&gt;</button>
+                </div>
+                <div class="calendar-body">
+                    <div class="weekdays">
+                        <div>Пн</div>
+                        <div>Вт</div>
+                        <div>Ср</div>
+                        <div>Чт</div>
+                        <div>Пт</div>
+                        <div>Сб</div>
+                        <div>Вс</div>
+                    </div>
+                    <div class="days"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            тут будет контент..
+        </div>
+    </div>
+    <script src="calendar.js"></script>
+</body>
+
+</html>

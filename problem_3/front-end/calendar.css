@@ -1,0 +1,92 @@
+.calendar {
+    background-color: #ffffff;
+    margin-top: 3%;
+    padding: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 300px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.month-year {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+}
+
+.prev,
+.next {
+    font-size: 18px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #007bff;
+    padding: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 15%;
+}
+
+.prev:hover,
+.next:hover {
+    background-color: #e6e6e6;
+    color: #0056b3;
+}
+
+.weekdays,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.weekdays div,
+.days div {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+}
+
+.weekdays div {
+    margin-bottom: 20%;
+}
+
+.days div:hover {
+    background-color: #d5d5d5;
+}
+
+.defaultDay {}
+
+.current {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.otherMonth {
+    color: #999999;
+    font-weight: bold;
+}
+
+.pre-selected {
+    background-color: #dceaf8 !important;
+    color: #696969 !important;
+    font-weight: bold;
+}
+
+.selected {
+    background-color: #bddeff !important;
+    color: #565656 !important;
+    font-weight: bold;
+}

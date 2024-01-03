@@ -12,4 +12,5 @@ problem_2/build
 problem_2/.gradle
 problem_2/src/main/resources/application.properties
 
-problem_3
+problem_3/todo_proxy/cd2b-env
+problem_3/todo_proxy/.idea
