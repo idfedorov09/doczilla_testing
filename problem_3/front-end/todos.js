@@ -1,31 +1,7 @@
-function forTests() {
-    let currentTasks = [];
-
-    testTask1 = {
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        name: "Выпить воды",
-        shortDesc: "Короткое описание первой задачи",
-        fullDesc: "Полное описание первой задачи",
-        date: "2024-01-03T11:33:19.319Z",
-        status: true
-    }
-    testTask2 = {
-        id: "3fa85f64-5717-4562-b4fc-2c963f66afa6",
-        name: "Почистить картошку",
-        shortDesc: "Короткое описание второй задачи - почистить картоху!",
-        fullDesc: "Полное описание второй задачи лучше не приводить..",
-        date: "2024-01-04T11:33:19.319Z",
-        status: false
-    }
-    currentTasks.push(testTask1);
-    currentTasks.push(testTask2);
-    frizeBody();
-    updateTaskList(currentTasks);
-}
-
 const bodyWrapper = document.querySelector('.body-wrapper');
 const modal = document.querySelector('.modal');
-forTests();
+const todoUri = "http://localhost:8000"
+let lastTasks = []
 
 
 function frizeBody() {
@@ -77,13 +53,13 @@ function convertToMoscowTime(dateTimeString) {
 
 // Добавляет задачу
 function renderTask(task) {
-    var todoElement = $('<div class="todo-element"></div>');
-    var titleElement = $('<div class="title"></div>');
+    let todoElement = $('<div class="todo-element"></div>');
+    let titleElement = $('<div class="title"></div>');
     titleElement.append('<span class="name">' + task.name + '</span>');
-    titleElement.append('<span class="date">' + task.date + '<i class="fa-solid fa-circle status-' + (task.status ? 'ok' : 'bad') + '"></i></span>');
+    titleElement.append('<span class="date">' + convertToMoscowTime(task.date) + '<i class="fa-solid fa-circle status-' + (task.status ? 'ok' : 'bad') + '"></i></span>');
     todoElement.append(titleElement);
     todoElement.append('<hr>');
-    var descElement = $('<div class="desc"></div>');
+    let descElement = $('<div class="desc"></div>');
     descElement.append('<span>' + task.shortDesc + '</span>');
     todoElement.append(descElement);
     $('.content-wrapper').append(todoElement);
@@ -94,28 +70,113 @@ function renderTask(task) {
     });
 }
 
+function renderJustSpan(text) {
+    let span = $(`<span>${text}</span>`);
+    $('.content-wrapper').append(span);
+}
+
 // Обновляет текущий список
 // TODO: анимация
 function updateTaskList(newTaskList) {
     $('.content-wrapper').empty();
+    lastTasks = newTaskList;
     for (let i = 0; i < newTaskList.length; i++) {
         renderTask(newTaskList[i]);
     }
+
+    if (newTaskList.length == 0) {
+        renderJustSpan("Ничего не найдено!");
+    }
+}
+
+function searchToday() {
+    let fromDate = new Date();
+    let toDate = new Date();
+    fromDate.setHours(0, 0, 0, 0);
+    toDate.setHours(23, 59, 59, 59);
+    console.log(fromDate);
+    console.log(toDate);
+    onChangeDate(fromDate.getTime(), toDate.getTime());
+}
+
+function searchOnWeek() {
+    let fromDate = getPreviosMonday();
+    let toDate = getPreviosMonday();
+    toDate.setDate(fromDate.getDate() + 6);
+    toDate.setHours(23, 59, 59, 59);
+
+    console.log(fromDate);
+    console.log(toDate);
+    onChangeDate(fromDate.getTime(), toDate.getTime());
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var closeModalBtn = document.querySelector('.modal button');
+    let closeModalBtn = document.querySelector('.modal button');
+    let todayButton = document.querySelector('[name="today"]');
+    let weekButton = document.querySelector('[name="week"]');
 
     closeModalBtn.addEventListener('click', function () {
         closeFullTask();
     });
+
+    todayButton.addEventListener('click', function () {
+        searchToday();
+    });
+
+    weekButton.addEventListener('click', function () {
+        searchOnWeek();
+    });
+
 });
+
+function getPreviosMonday() {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const daysSinceLastMonday = (dayOfWeek + 6) % 7;
+    const lastMonday = new Date(today);
+    lastMonday.setDate(today.getDate() - daysSinceLastMonday);
+    lastMonday.setHours(0, 0, 0, 0);
+    return lastMonday;
+}
 
 
 function preRenderFullTask(task) {
-    newStatus = task.status ? 'ok' : 'bad';
-    $('.modal-wrapper .name i').removeClass('fa-circle status-ok').addClass('fa-circle ' + newStatus);
-    $('.modal-wrapper .name').text(task.name);
+    newStatus = task.status ? 'status-ok' : 'status-bad';
+    $('.modal-wrapper .name i').removeClass('status-ok');
+    $('.modal-wrapper .name i').removeClass('status-bad');
+    $('.modal-wrapper .name i').addClass(newStatus);
+    $('.modal-wrapper .name span').text(task.name);
     $('.modal-wrapper .full-desc').text(task.fullDesc);
     $('.modal-wrapper .date').text(convertToMoscowTime(task.date));
 }
+
+// TODO: показывать, когда пусто!
+function onChangeDate(from, to) {
+    $('.content-wrapper').empty();
+    renderJustSpan("Ищу, подождите...");
+
+
+    const queryParams = new URLSearchParams({
+        from_date: from,
+        to_date: to
+    });
+
+    fetch(todoUri + '/api/todos/date?' + queryParams, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateTaskList(data);
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+searchToday();

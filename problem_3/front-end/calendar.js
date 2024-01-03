@@ -91,7 +91,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 selectedEndDate = tmp;
             }
 
-            console.log("Выбранный диапазон дат:", selectedStartDate.toLocaleDateString(), "-", selectedEndDate.toLocaleDateString());
+            selectedEndDate.setHours(23, 59, 59, 59);
+            
+            console.log(selectedStartDate);
+            console.log(selectedEndDate);
+            const from = selectedStartDate.getTime(),
+                to = selectedEndDate.getTime();
+
+            onChangeDate(from, to);
             highlightSelectedRange();
 
             const preSelectedDays = document.querySelectorAll(".pre-selected");

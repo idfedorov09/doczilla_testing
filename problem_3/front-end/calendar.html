@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="body-wrapper">
+    <div class="body-wrapper default">
         <div class="header">
             <div class="query-block">
                 <div class="search-container">
@@ -28,8 +28,8 @@
         </div>
 
         <div class="left-column">
-            <button type="submit" class="column">На сегодня</button>
-            <button type="submit" class="column">На неделю</button>
+            <button name="today" type="submit" class="column">На сегодня</button>
+            <button name="week" type="submit" class="column">На неделю</button>
             <div class="calendar">
                 <div class="calendar-header">
                     <button class="prev">&lt;</button>
@@ -51,19 +51,21 @@
             </div>
         </div>
 
+
         <div class="content">
+            <!-- сюда можно добавить флажок для сортировки -->
             <div class="content-wrapper">
                 <!-- Здесь находятся задачи -->
             </div>
         </div>
     </div>
 
-    <div class="modal">
+    <div class="modal hide-modal">
         <div class="modal-wrapper">
-            <span class="name">
+            <div class="name">
                 <i class="fa-solid fa-circle status-ok"></i>
-                Название
-            </span>
+                <span>Название</span>
+            </div>
             <hr>
             <span class="date">26.06.2023 12:51</span>
             <span class="full-desc">

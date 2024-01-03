@@ -150,20 +150,26 @@ button.column:active {
     width: 50%;
 }
 
-.title .date {
+.title .date {<div class="chbx-form">
+    <label class="chbx-control">
+        <input type="checkbox" name="checkbox-checked" />
+        Сортировка по дате
+    </label>
+</div>
     float: right;
     width: 50%;
     display: flex;
     justify-content: flex-end;
 }
 
-.status-bad{
+.status-bad {
     color: rgb(220, 26, 26);
 }
 
-.status-ok{
+.status-ok {
     color: rgb(8, 175, 8);
 }
+
 .date .status-bad {
     margin-left: 10px;
 }
