@@ -88,4 +88,5 @@ python main.py
 ```
 Эта команда запустит его на порту `8000`. Сам ToDo List будет доступен после запуска по адресу [localhost:8000](http://localhost:8000/).
 
-![image](https://github.com/idfedorov09/doczilla_testing/assets/65663748/085162ff-bfb3-4512-9881-a9863d996373)
+![image](https://github.com/idfedorov09/doczilla_testing/assets/65663748/8f492b06-e04f-44ed-9ff6-7f36a5883bb6)
+
