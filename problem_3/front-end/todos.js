@@ -1,8 +1,12 @@
+
 const bodyWrapper = document.querySelector('.body-wrapper');
 const modal = document.querySelector('.modal');
 const todoUri = "http://localhost:8000"
 let lastTasks = []
-
+let lastTasksSorted = []
+let lastTasksSortedReversed = []
+let onlyBad = false
+let sortStatus = false;
 
 function frizeBody() {
     bodyWrapper.classList.remove('default')
@@ -51,8 +55,57 @@ function convertToMoscowTime(dateTimeString) {
     return formattedDateTime;
 }
 
+function createFilterBar() {
+    // false - по убыванию, true - по убыванию
+    sortStatus = false;
+    let filterBar = $('<div>', {
+        class: 'filter-bar'
+    });
+
+    let chbxWrapper = $('<div>', {
+        class: 'chbx-wrapper'
+    });
+
+    let chbxLabel = $('<label>', {
+        class: 'chbx-control'
+    }).append(
+        $('<input>', {
+            type: 'checkbox',
+            id: 'checkboxStatus'
+        }),
+        'Только невыполненные'
+    );
+    chbxLabel.find('#checkboxStatus').prop('checked', onlyBad);
+
+    chbxLabel.find('#checkboxStatus').click(function () {
+        onlyBad = this.checked;
+        updateTaskList(lastTasks);
+    });
+
+    let sortBar = $('<div>', {
+        class: 'sort-bar'
+    });
+
+    let caretUpIcon = $('<i>', {
+        class: 'compare-flag'
+    });
+
+    let dateSorter = $('<span>', {
+        id: 'date_sorter',
+        class: 'sorter'
+    }).text('Сортировать по дате');
+
+    chbxWrapper.append(chbxLabel);
+    sortBar.append(caretUpIcon, dateSorter);
+    filterBar.append(chbxWrapper, sortBar);
+
+    return filterBar;
+}
+
 // Добавляет задачу
-function renderTask(task) {
+function renderTask(task, doAppend = false) {
+    if (task.status && onlyBad) return;
+
     let todoElement = $('<div class="todo-element"></div>');
     let titleElement = $('<div class="title"></div>');
     titleElement.append('<span class="name">' + task.name + '</span>');
@@ -62,6 +115,18 @@ function renderTask(task) {
     let descElement = $('<div class="desc"></div>');
     descElement.append('<span>' + task.shortDesc + '</span>');
     todoElement.append(descElement);
+
+    let wrapperSize = $('.content-wrapper').children().length
+    if (doAppend && wrapperSize == 1) {
+        todoElement.css("margin", "1% 0 -2px 0");
+    }
+
+    if (wrapperSize == 0) {
+        const filterBar = createFilterBar();
+        $('.content-wrapper').append(filterBar);
+        todoElement.css("margin", "1% 0 -2px 0");
+    }
+
     $('.content-wrapper').append(todoElement);
 
     todoElement.on('click', function () {
@@ -76,15 +141,22 @@ function renderJustSpan(text) {
 }
 
 // Обновляет текущий список
-// TODO: анимация
-function updateTaskList(newTaskList) {
-    $('.content-wrapper').empty();
+function updateTaskList(newTaskList, doAppend = false) {
+    if (doAppend) {
+        const statusBar = $('.content-wrapper').children().first();
+        $('.content-wrapper').empty();
+        $('.content-wrapper').append(statusBar);
+    } else {
+        $('.content-wrapper').empty();
+    }
     lastTasks = newTaskList;
+    let isOk = false;
     for (let i = 0; i < newTaskList.length; i++) {
-        renderTask(newTaskList[i]);
+        renderTask(newTaskList[i], doAppend);
+        isOk |= (!(newTaskList[i].status && onlyBad));
     }
 
-    if (newTaskList.length == 0) {
+    if (!isOk) {
         renderJustSpan("Ничего не найдено!");
     }
 }
@@ -114,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let closeModalBtn = document.querySelector('.modal button');
     let todayButton = document.querySelector('[name="today"]');
     let weekButton = document.querySelector('[name="week"]');
+    let allButton = document.querySelector('[name="all_time"]');
 
     closeModalBtn.addEventListener('click', function () {
         closeFullTask();
@@ -127,6 +200,36 @@ document.addEventListener('DOMContentLoaded', function () {
         searchOnWeek();
     });
 
+    allButton.addEventListener('click', function () {
+        allTasks();
+    });
+
+    $(".search-input").keypress(function (event) {
+        const searchValue = $(".search-input").val();
+        findByString(searchValue);
+    });
+
+    $('.content-wrapper').on('click', '#date_sorter', function () {
+        console.log('test');
+        if (sortStatus) {
+            $("i.compare-flag").attr('class', 'fa-solid fa-caret-up compare-flag');
+            updateTaskList(lastTasksSorted, doAppend = true);
+            sortStatus = false;
+        }
+        else {
+            $("i.compare-flag").attr('class', 'fa-solid fa-caret-down compare-flag');
+            updateTaskList(lastTasksSortedReversed, doAppend = true);
+            sortStatus = true;
+        }
+    });
+
+    $('.content-wrapper').on('click', '#checkboxStatus', function () {
+        onlyBad = this.checked;
+        updateTaskList(lastTasks, doAppend = true);
+    });
+
+    // при инициализации выводим список всех задач
+    allTasks();
 });
 
 function getPreviosMonday() {
@@ -139,9 +242,8 @@ function getPreviosMonday() {
     return lastMonday;
 }
 
-
 function preRenderFullTask(task) {
-    newStatus = task.status ? 'status-ok' : 'status-bad';
+    const newStatus = task.status ? 'status-ok' : 'status-bad';
     $('.modal-wrapper .name i').removeClass('status-ok');
     $('.modal-wrapper .name i').removeClass('status-bad');
     $('.modal-wrapper .name i').addClass(newStatus);
@@ -155,7 +257,12 @@ function preQuery() {
     renderJustSpan("Ищу, подождите...");
 }
 
-// TODO: показывать, когда пусто!
+function setLastTasks(newTaskList) {
+    lastTasks = newTaskList;
+    lastTasksSorted = [...lastTasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+    lastTasksSortedReversed = [...lastTasks].sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
 function onChangeDate(from, to) {
     preQuery();
 
@@ -175,7 +282,30 @@ function onChangeDate(from, to) {
             return response.json();
         })
         .then(data => {
-            updateTaskList(data);
+            setLastTasks(data);
+            updateTaskList(lastTasks);
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+function allTasks() {
+    preQuery();
+
+    fetch(todoUri + '/api/todos', {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setLastTasks(data);
+            updateTaskList(lastTasks);
         })
         .catch(error => {
             console.error('Fetch error:', error);
@@ -198,18 +328,10 @@ function findByString(text) {
             return response.json();
         })
         .then(data => {
-            updateTaskList(data);
+            setLastTasks(data);
+            updateTaskList(lastTasks);
         })
         .catch(error => {
             console.error('Fetch error:', error);
         });
 }
-
-$(".search-input").keypress(function (event) {
-    if (event.which === 13) {
-        const searchValue = $(".search-input").val();
-        findByString(searchValue);
-    }
-});
-
-searchToday();

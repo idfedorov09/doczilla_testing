@@ -180,3 +180,41 @@ hr {
     margin: 2px 0 5px 0;
     height: 1px;
 }
+
+
+.chbx-control {
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+}
+
+.chbx-wrapper {
+    margin-right: 2%;
+    user-select: none;
+}
+
+.filter-bar {
+    margin: 1% 0 1% 0;
+    display: flex;
+    justify-content: flex-end;
+    user-select: none;
+}
+
+.sort-bar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.compare-flag {
+    letter-spacing: 3px;
+}
+
+.sort-bar:hover {
+    text-decoration: underline;
+    color: #137cd2;
+}
+
+.sort-bar:active {
+    color: #105e9e;
+}

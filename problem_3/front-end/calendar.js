@@ -93,10 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             selectedEndDate.setHours(23, 59, 59, 59);
             
-            console.log(selectedStartDate);
-            console.log(selectedEndDate);
-            const from = selectedStartDate.getTime(),
-                to = selectedEndDate.getTime();
+            const from = selectedStartDate.getTime(), to = selectedEndDate.getTime();
 
             onChangeDate(from, to);
             highlightSelectedRange();
