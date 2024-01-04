@@ -204,10 +204,21 @@ document.addEventListener('DOMContentLoaded', function () {
         allTasks();
     });
 
-    $(".search-input").keypress(function (event) {
+    $(".search-input").on("input", function () {
         const searchValue = $(".search-input").val();
         findByString(searchValue);
+        console.log(`val=${searchValue}`);
     });
+
+    $(".search-input").keydown(function (event) {
+        const backspaceKeyCode = 8, deleteKeyCode = 46;
+        if (event.which === backspaceKeyCode || event.which === deleteKeyCode) {
+            const searchValue = $(".search-input").val();
+            findByString(searchValue);
+            console.log(`val=${searchValue}`);
+        }
+    });
+
 
     $('.content-wrapper').on('click', '#date_sorter', function () {
         console.log('test');
@@ -276,8 +287,7 @@ function onChangeDate(from, to) {
     })
         .then(response => {
             if (!response.ok) {
-                console.error('Error:', response.statusText);
-                throw new Error('Network response was not ok');
+                throw new Error(`Network response was not ok: ${response.statusText}`);
             }
             return response.json();
         })
@@ -286,7 +296,7 @@ function onChangeDate(from, to) {
             updateTaskList(lastTasks);
         })
         .catch(error => {
-            console.error('Fetch error:', error);
+            renderJustSpan(`Ошибка: ${error}`)
         });
 }
 
@@ -298,8 +308,7 @@ function allTasks() {
     })
         .then(response => {
             if (!response.ok) {
-                console.error('Error:', response.statusText);
-                throw new Error('Network response was not ok');
+                throw new Error(`Network response was not ok: ${response.statusText}`);
             }
             return response.json();
         })
@@ -308,7 +317,7 @@ function allTasks() {
             updateTaskList(lastTasks);
         })
         .catch(error => {
-            console.error('Fetch error:', error);
+            renderJustSpan(`Ошибка: ${error}`)
         });
 }
 
@@ -322,8 +331,7 @@ function findByString(text) {
     })
         .then(response => {
             if (!response.ok) {
-                console.error('Error:', response.statusText);
-                throw new Error('Network response was not ok');
+                throw new Error(`Network response was not ok: ${response.statusText}`);
             }
             return response.json();
         })
@@ -332,6 +340,6 @@ function findByString(text) {
             updateTaskList(lastTasks);
         })
         .catch(error => {
-            console.error('Fetch error:', error);
+            renderJustSpan(`Ошибка: ${error}`)
         });
 }
